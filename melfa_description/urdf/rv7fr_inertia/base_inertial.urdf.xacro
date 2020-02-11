@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<robot
+		name="base" xmlns:xacro="http://ros.org/wiki/xacro">
+    <inertial>
+      <!--origin
+        xyz="-0.11257 -4.1589E-05 0.057533"
+        rpy="0 0 0" /-->
+      <!-- I am using the density of Alumide (1.36g/cm^3) for this -->
+      <!-- The volume of the mesh is 13038.131 cm^3 -->
+      <mass
+        value="${1.36*13038.131*0.001}" />
+      <inertia
+        ixx="${103908878848*0.000000001}"
+        ixy="${6363055616*0.000000001}"
+        ixz="${-6148561408*0.000000001}"
+        iyy="${139111661568*0.000000001}"
+        iyz="${2115191296*0.000000001}"
+        izz="${132604526592*0.000000001}" />
+    </inertial>
+</robot>

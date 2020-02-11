@@ -1,0 +1,322 @@
+<?xml version="1.0"?>
+
+<!--[ ] Add Gazebo plugin for ros control-->
+<!--[ ] Add sensor model plugin -->
+<!--[ ] Check the correct limits efforts
+     [119.36611817, 107.16168698,  50.92959239,  17.00171377, 12.7323981 ,   3.97887346] -->
+<!--[DONE] Check if the transmission matched the joint number -->
+<robot name="rv7fr" xmlns:xacro="http://ros.org/wiki/xacro">
+  <material name="white">
+    <color rgba="${255/255} ${250/255} ${229/255} 1"/>
+  </material>
+
+  <material name="silver">
+    <color rgba="${157/255} ${214/255} ${240/255} 1"/>
+  </material>
+
+  <!--Mathematical constant
+  The mathematical constant and 
+  the mathematical expression in XACRO 
+  URDF use Python. This preclude the
+  mathematical expression
+  <[End] Mathematical constant-->
+
+  <link name="world"/>
+
+  <link name="floor">
+    <visual>
+      <geometry>
+        <mesh filename="package://melfa_description/mesh/rv7fr/floor.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://melfa_description/mesh/rv7fr/floor.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>    
+    <!--inertial-->
+    <xacro:include filename="rv7fr_inertia/base_inertial.urdf.xacro"/>
+    <!--inertial-->
+  </link>
+
+  <joint name="flooring" type="fixed">
+    <parent link="world"/>
+    <child link="floor"/>
+  </joint>
+
+
+  <link name="base">
+    <visual>
+      <geometry>
+        <mesh filename="package://melfa_description/mesh/rv7fr/dh_base.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://melfa_description/mesh/rv7fr/dh_base.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>    
+    <!--inertial-->
+    <xacro:include filename="rv7fr_inertia/base_inertial.urdf.xacro"/>
+    <!--inertial-->
+  </link>
+
+  <!--Fixed joint-->
+  <joint name="joint_w" type="fixed">
+    <parent link="floor"/>
+    <child link="base"/>
+    <origin xyz="0 0 0.01" rpy="0 0 0"/>
+  </joint>
+
+  <link name="link1">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://melfa_description/mesh/rv7fr/dh_link1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <!--inertial-->
+    <xacro:include filename="rv7fr_inertia/link1_inertial.urdf.xacro"/>
+    <!--inertial-->
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://melfa_description/mesh/rv7fr/dh_link1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="joint1" type="revolute">
+    <parent link="base"/>
+    <child link="link1"/>
+    <origin rpy="0.0 0.0 0.0" xyz="0 0 0.225"/> 
+    <axis xyz="0 0 1"/>
+    <!--Effort in this context is in N.m (revolute joint)-->
+    <limit effort="119.36611817" upper="${radians(240)}" lower="${radians(-240)}" velocity="${radians(360)}"/>
+    <dynamics damping="0" friction="0"/>
+  </joint>
+  <transmission name="trans1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint1">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor1">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <link name="link2">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://melfa_description/mesh/rv7fr/dh_link2.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <!--inertial-->
+    <xacro:include filename="rv7fr_inertia/link2_inertial.urdf.xacro"/>
+    <!--inertial-->
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://melfa_description/mesh/rv7fr/dh_link2.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  
+  <joint name="joint2" type="revolute">
+    <parent link="link1"/>
+    <child link="link2"/>
+    <origin rpy="${radians(-90)} 0.0 0.0" xyz="0 0 0.175"/> 
+    <axis xyz="0 0 1"/>
+    <!--Effort in this context is in N.m (revolute joint)-->
+    <limit effort="107.16168698" lower="${radians(-107-90)}" upper="${radians(125-90)}" velocity="${radians(401)}"/>
+    <dynamics damping="0" friction="0"/>
+  </joint>
+  <transmission name="trans2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint2">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor2">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <link name="link3">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://melfa_description/mesh/rv7fr/dh_link3.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <!--inertial-->
+    <xacro:include filename="rv7fr_inertia/link3_inertial.urdf.xacro"/>
+    <!--inertial-->
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://melfa_description/mesh/rv7fr/dh_link3.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="joint3" type="revolute">
+    <parent link="link2"/>
+    <child link="link3"/>
+    <origin rpy="0 0 0" xyz="0.34 0 0"/> 
+    <axis xyz="0 0 1"/>
+    <!--Effort in this context is in N.m (revolute joint)-->
+    <limit effort="50.92959239" lower="${radians(-90)}" upper="${radians(156-90)}" velocity="${radians(450)}"/>
+    <dynamics damping="0" friction="0"/>
+  </joint>
+  <transmission name="trans3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint3">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor3">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <link name="link4">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.095"/>
+      <geometry>
+        <mesh filename="package://melfa_description/mesh/rv7fr/dh_link4.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <!--inertial-->
+    <xacro:include filename="rv7fr_inertia/link4_inertial.urdf.xacro"/>
+    <!--inertial-->
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.095"/>
+      <geometry>
+        <mesh filename="package://melfa_description/mesh/rv7fr/dh_link4.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="joint4" type="revolute">
+    <parent link="link3"/>
+    <child link="link4"/>
+    <origin rpy="${radians(-90)} 0 0" xyz="0.05 0 0"/> 
+    <axis xyz="0 0 1"/>
+    <!--Effort in this context is in N.m (revolute joint)-->
+    <limit effort="16.2" lower="${radians(-200)}" upper="${radians(200)}" velocity="${radians(337)}"/>
+    <dynamics damping="0" friction="0"/>
+  </joint>
+  <transmission name="trans4">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint4">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor4">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <link name="link5">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://melfa_description/mesh/rv7fr/dh_link5.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <!--inertial-->
+    <xacro:include filename="rv7fr_inertia/link5_inertial.urdf.xacro"/>
+    <!--inertial-->
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://melfa_description/mesh/rv7fr/dh_link5.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="joint5" type="revolute">
+    <parent link="link4"/>
+    <child link="link5"/>
+    <origin rpy="${radians(90)} 0 0" xyz="0 0 ${0.2745+0.095}"/> 
+    <axis xyz="0 0 1"/>
+    <!--Effort in this context is in N.m (revolute joint)-->
+    <limit effort="16.2" lower="${radians(-120)}" upper="${radians(120)}" velocity="${radians(450)}"/>
+    <dynamics damping="0" friction="0"/>
+  </joint>
+  <transmission name="trans5">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint5">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor5">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <link name="link6">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.085"/>
+      <geometry>
+        <mesh filename="package://melfa_description/mesh/rv7fr/dh_link6.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <!--inertial-->
+    <xacro:include filename="rv7fr_inertia/link6_inertial.urdf.xacro"/>
+    <!--inertial-->
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.085"/>
+      <geometry>
+        <mesh filename="package://melfa_description/mesh/rv7fr/dh_link6.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="joint6" type="revolute">
+    <parent link="link5"/>
+    <child link="link6"/>
+    <origin rpy="${radians(-90)} 0 0" xyz="0 0 0"/> 
+    <axis xyz="0 0 1"/>
+    <!--Effort in this context is in N.m (revolute joint)-->
+    <limit effort="6.86" lower="${radians(-360)}" upper="${radians(360)}" velocity="${radians(720)}"/>
+    <dynamics damping="0" friction="0"/>
+  </joint>
+  <transmission name="trans6">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint6">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor6">
+      <hardwareInterface>PositionJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <!-- Dummy/Buffer joint for inverse kinematics -->
+
+  <link name="link_effector"/>
+  
+  <joint name="joint_effector" type="fixed">
+    <parent link="link6"/>
+    <child link="link_effector"/>
+    <origin rpy="0 0 0" xyz="0 0 0.085"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+
+</robot>

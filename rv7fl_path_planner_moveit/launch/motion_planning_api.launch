@@ -1,0 +1,8 @@
+<launch>
+  <node name="rv7_motion_planning_api_node" pkg="rv7fl_path_planner_moveit" type="rv7_motion_planning_api_node" respawn="false" output="screen">
+    <rosparam command="load" file="$(find rv7fr_dh_floor)/config/kinematics.yaml"/>
+    <param name="/planning_plugin" value="ompl_interface/OMPLPlanner"/>
+    <rosparam command="load" file="$(find rv7fr_dh_floor)/config/ompl_planning.yaml"/>
+  </node>
+
+</launch>
