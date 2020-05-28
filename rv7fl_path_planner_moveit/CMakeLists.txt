@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(rv7fl_path_planner_moveit)
 
-## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++11)
+## Deprecate this Compile as C++11, supported in ROS Kinetic and newer
+## add_compile_options(-std=c++11)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -16,11 +18,12 @@ find_package(Boost REQUIRED system filesystem date_time thread)
 
 find_package(catkin REQUIRED COMPONENTS
   geometric_shapes
-  geometry_msgs
+  ##geometry_msgs
   interactive_markers
   moveit_core
   moveit_msgs
   moveit_ros_perception
+  moveit_ros_planning
   moveit_ros_planning_interface
   moveit_visual_tools
   pcl_conversions
@@ -28,6 +31,9 @@ find_package(catkin REQUIRED COMPONENTS
   pluginlib
   roscpp
   rospy
+  tf2_ros
+  tf2_eigen
+  tf2_geometry_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -122,7 +128,19 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES rv7fl_path_planner_moveit
-  CATKIN_DEPENDS geometric_shapes geometry_msgs interactive_markers moveit_core moveit_msgs moveit_ros_perception moveit_ros_planning_interface moveit_visual_tools pcl_conversions pcl_ros pluginlib roscpp rospy
+  CATKIN_DEPENDS 
+  geometric_shapes 
+  interactive_markers 
+  moveit_core 
+  moveit_msgs 
+  moveit_ros_perception 
+  moveit_ros_planning_interface 
+  moveit_visual_tools 
+  pcl_conversions 
+  pcl_ros pluginlib 
+  roscpp 
+  rospy 
+  tf2_geometry_msgs tf2_eigen tf2_ros
   DEPENDS EIGEN3
 )
 
@@ -135,16 +153,26 @@ catkin_package(
 ##[IMAN]
 include_directories(SYSTEM ${Boost_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIRS})
 include_directories(
-# include
+	##[IMAN] Here I included a 'include'
+	## because I will be placing the
+	## interactivity header files in the package's include directory
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
 ##[IMAN]
 link_directories(${catkin_LIBRARY_DIRS})
 ## Declare a C++ library
-# add_library(${PROJECT_NAME}
+
+##[IMAN] Attempting to add the interactivity util here
+set(INTERACTIVITY_LIB_NAME rv7_interactivity_utils)
+add_library( ${INTERACTIVITY_LIB_NAME}
+	src/interactive_robot.cpp
+	src/imarker.cpp
+	src/pose_string.cpp
 #   src/${PROJECT_NAME}/rv7fl_path_planner_moveit.cpp
-# )
+)
+
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -156,7 +184,7 @@ link_directories(${catkin_LIBRARY_DIRS})
 ## The recommended prefix ensures that target names across packages don't collide
 ##[IMAN]
 add_executable(rv7_move_group_interface_node src/move_group_interface.cpp)
-add_executable(rv7_robot_state_node src/robot_state.cpp)
+add_executable(rv7_robot_state_node src/robot_model_robot_state.cpp)
 add_executable(rv7_planning_scene_node src/planning_scene.cpp)
 add_executable(rv7_planning_scene_ros_api_node src/planning_scene_ros_api.cpp)
 add_executable(rv7_motion_planning_api_node src/motion_planning_api.cpp)
@@ -174,11 +202,22 @@ add_executable(rv7_motion_planning_api_node src/motion_planning_api.cpp)
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
+
+## [IMAN] This it to build the library
+target_link_libraries(${INTERACTIVITY_LIB_NAME} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
 target_link_libraries(rv7_move_group_interface_node ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 target_link_libraries(rv7_robot_state_node ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 target_link_libraries(rv7_planning_scene_node ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 target_link_libraries(rv7_planning_scene_ros_api_node ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 target_link_libraries(rv7_motion_planning_api_node ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
+add_executable(rv7_motion_planning_pipeline_node src/motion_planning_pipeline.cpp)
+target_link_libraries(rv7_motion_planning_pipeline_node ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
+add_executable(rv7_visualizing_collision_node src/visualizing_collision.cpp)
+target_link_libraries(rv7_visualizing_collision_node ${INTERACTIVITY_LIB_NAME} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
 #############
 ## Install ##
 #############

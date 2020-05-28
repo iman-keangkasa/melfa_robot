@@ -140,10 +140,13 @@ int main(int argc, char ** argv)
   planning_interface::MotionPlanResponse res;
   geometry_msgs::PoseStamped pose;
   pose.header.frame_id = "floor";
-  pose.pose.position.x = 0.6018;
-  pose.pose.position.y = 0.2863;
-  pose.pose.position.z = 0.3447;
-  pose.pose.orientation.w = 1.0;
+  pose.pose.position.x = 0.558106;
+  pose.pose.position.y = -0.34530136;
+  pose.pose.position.z =0.352183377853 ;
+  pose.pose.orientation.x = 0.998902675311;
+  pose.pose.orientation.y = 7.35460771334e-05;
+  pose.pose.orientation.z = 0.0468339753278;
+  pose.pose.orientation.w = 0.000136393973858;
   /*req.workspace_parameters.min_corner.x = req.workspace_parameters.min_corner.y = 
     req.workspace_parameters.min_corner.z = -2.0;
   req.workspace_parameters.max_corner.x = req.workspace_parameters.max_corner.y =
@@ -215,7 +218,7 @@ int main(int argc, char ** argv)
   // of the last plan
   // Now, setup a joint space goal
   robot_state::RobotState goal_state(robot_model);
-  std::vector<double> joint_values = { -0.0182, -0.2585, -0.1743, -0.3680, 0.3483, 0.3139 };
+  std::vector<double> joint_values = { -1.84283744663, -1.01344139343, 0.62305, 0.220818009862, 0.424579123416, 4.23749233952 };
   goal_state.setJointGroupPositions(joint_model_group, joint_values);
   moveit_msgs::Constraints joint_goal = kinematic_constraints::constructGoalConstraints(goal_state, joint_model_group);
   req.goal_constraints.clear();
@@ -280,10 +283,13 @@ int main(int argc, char ** argv)
   // """"""""""""""""""""""
   // I add a new pose goal again. This time I will also add a path constraint
   // to the motion. 
-  pose.pose.position.x = 0.5092;
-  pose.pose.position.y = -0.1599;
-  pose.pose.position.z = 0.3989;
-  pose.pose.orientation.w = 1.0;
+  pose.pose.position.x = 0.179203331648;
+  pose.pose.position.y = -0.0182407620131;
+  pose.pose.position.z = 1.02628940112;
+	pose.pose.orientation.x = -0.839269878305;
+	pose.pose.orientation.y = 0.0000241926516947;
+	pose.pose.orientation.z = -0.543715063956;
+  pose.pose.orientation.w = 0.000003;
   moveit_msgs::Constraints pose_goal_2 = 
     kinematic_constraints::constructGoalConstraints("link_effector", pose, tolerance_pose, tolerance_angle);
   /* First, set the state in the planning scene to the final state of the last plan */
@@ -294,7 +300,12 @@ int main(int argc, char ** argv)
 
   geometry_msgs::QuaternionStamped quaternion;
   quaternion.header.frame_id = "base";
-  quaternion.quaternion.w = 1.0;
+  quaternion.quaternion.x = 0.0;
+	quaternion.quaternion.y= 1.0;
+	quaternion.quaternion.z = 0.0;
+  quaternion.quaternion.w = 0.00000;
+
+	
   req.path_constraints = kinematic_constraints::constructGoalConstraints("link_effector", quaternion);
 
   // Imposing path contraints requires the planner to reason in the space 
@@ -328,9 +339,6 @@ int main(int argc, char ** argv)
   robot_state->setJointGroupPositions(joint_model_group, response.trajectory.joint_trajectory.points.back().positions);
   planning_scene->setCurrentState(*robot_state.get());
 
-  // Display the goal state 
-  visual_tools.publishRobotState(planning_scene->getCurrentStateNonConst(), rviz_visual_tools::GREEN);
-  visual_tools.publishAxisLabeled(pose.pose, "goal_3");
   visual_tools.publishText(text_pose, "Orientation Constraint Motion Plna (3)", rvt::WHITE, rvt::XLARGE);
   visual_tools.trigger();
 

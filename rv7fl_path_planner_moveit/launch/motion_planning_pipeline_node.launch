@@ -1,0 +1,48 @@
+<launch>
+	<!-- This contains the adapters for OMPL -->
+	<!--include file="$(find rv7fr_dh_floor)/launch/ompl_planning_pipeline.launch.xml"/-->
+	
+	
+  <!-- OMPL Plugin for MoveIt! -->
+  <arg name="planning_plugin" value="ompl_interface/OMPLPlanner" />
+
+  <!-- The request adapters (plugins) used when planning with OMPL.
+       ORDER MATTERS -->
+  <arg name="planning_adapters" value="default_planner_request_adapters/AddTimeParameterization
+				       default_planner_request_adapters/FixWorkspaceBounds
+				       default_planner_request_adapters/FixStartStateBounds
+				       default_planner_request_adapters/FixStartStateCollision
+				       default_planner_request_adapters/FixStartStatePathConstraints" />
+
+  <arg name="start_state_max_bounds_error" value="0.1" />
+
+ 
+
+	<!--include file="$(find rv7fr_dh_floor)/launch/planning_context.launch">
+		<arg name="load_robot_description" value="true"/>
+	</include>
+
+	<node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_0"
+		args="0 0 0 0 0 0 odom_combined base 100"/>
+
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+		<param name="/use_gui" value="true"/>
+	</node>
+
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+		respawn="true" output="screen"/>
+
+	<include file="$(find rv7fr_dh_floor)/launch/moveit_rviz.launch"/-->
+
+	<node name="motion_planning_pipeline_node" pkg="rv7fl_path_planner_moveit"
+		type="rv7_motion_planning_pipeline_node" respawn="false" output="screen">
+		<param name="planning_plugin" value="$(arg planning_plugin)"/>
+		<param name="request_adapters" value="$(arg planning_adapters)"/>
+		<param name="start_state_max_bounds_error" value="0.1"/>
+	</node>
+
+	<!--rosparam command="load" file="$(find rv7fr_dh_floor)/config/ompl_planning.yaml"/>
+	<rosparam command="load" file="$(find rv7fr_dh_floor)/config/kinematics.yaml"/-->
+</launch>
+
+

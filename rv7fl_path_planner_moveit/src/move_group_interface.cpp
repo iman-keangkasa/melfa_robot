@@ -51,7 +51,7 @@ int main (int argc, char ** argv)
   visual_tools.loadRemoteControl();
 
   //Rviz has many markers 
-  Eigen::Affine3d text_pose = Eigen::Affine3d::Identity();
+  Eigen::Isometry3d text_pose = Eigen::Isometry3d::Identity();
   text_pose.translation().z() = 1.75; // meter
   visual_tools.publishText(text_pose, "MoveGroupInterface Demo", rvt::WHITE, rvt::XLARGE);
   visual_tools.trigger();

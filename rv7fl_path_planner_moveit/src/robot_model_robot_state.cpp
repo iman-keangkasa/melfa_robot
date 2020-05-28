@@ -1,5 +1,4 @@
-/************************************
- * The robot state of RV7 series
+/************************************ * The robot state of RV7 series
  * This code is based on the tutorial 
  * written by Sachin Chitta
  ***********************************/
@@ -72,7 +71,7 @@ int main( int argc, char ** argv)
   // Note that I would like to find the pose of the most distal link
   // in the "arm" of rv7 
   kinematic_state->setToRandomPositions(joint_model_group); //[IMAN] get from current 
-  const Eigen::Affine3d & end_effector_state = kinematic_state -> getGlobalLinkTransform("link_effector");
+  const Eigen::Isometry3d& end_effector_state = kinematic_state -> getGlobalLinkTransform("link_effector");
 
   // Print end-effector pose
   ROS_INFO_STREAM("Translation: \n" << end_effector_state.translation() << "\n");
@@ -85,9 +84,9 @@ int main( int argc, char ** argv)
   // - The number of attempts to solve the IK: 10
   // - The timeout for each attempt: 0.1 s
 
-  std::size_t attempts = 10;
+  //std::size_t attempts = 10; //Deprecated
   double timeout = 0.1;
-  bool found_ik = kinematic_state -> setFromIK(joint_model_group, end_effector_state, attempts, timeout);
+  bool found_ik = kinematic_state -> setFromIK(joint_model_group, end_effector_state, timeout);
 
   //I print out the IK solution (if found):
   if(found_ik)
