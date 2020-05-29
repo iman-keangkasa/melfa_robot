@@ -63,7 +63,7 @@ public:
   const std::string& getGroupName() const;
 
   /** Set the pose of the group we are manipulating */
-  void setGroupPose(const Eigen::Isometry3d& pose);
+  bool setGroupPose(const Eigen::Isometry3d& pose);
 
   /** set pose of the world object */
   void setWorldObjectPose(const Eigen::Isometry3d& pose);
