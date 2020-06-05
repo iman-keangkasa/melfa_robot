@@ -1,0 +1,13 @@
+<launch>
+
+  <!-- load OMPL planning pipeline -->
+  <include file="$(find rv7fr_dh_floor)/launch/ompl_planning_pipeline.launch.xml"/>
+  
+  <!-- load CHOMP config -->
+  <rosparam command="load" file="$(find rv7fr_dh_floor)/config/chomp_planning.yaml"/>
+  
+  <!-- override trajectory_initialization_method -->
+  <param name="trajectory_initialization_method" value="fillTrajectory"/>
+
+</launch>
+  

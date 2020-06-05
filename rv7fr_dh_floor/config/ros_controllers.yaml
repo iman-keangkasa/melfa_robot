@@ -33,8 +33,8 @@ controller_list:
       - joint4
       - joint5
       - joint6
-joint_velocity_trajectory:
-  type: velocity_controllers/JointTrajectoryController
+joint_controller:
+  type: position_controllers/JointPositionController
   joints:
     - joint1
     - joint2
@@ -73,8 +73,8 @@ joint_velocity_trajectory:
       d: 1
       i: 1
       i_clamp: 1
-joint_controller:
-  type: position_controllers/JointPositionController
+joint_velocity_trajectory:
+  type: velocity_controllers/JointTrajectoryController
   joints:
     - joint1
     - joint2

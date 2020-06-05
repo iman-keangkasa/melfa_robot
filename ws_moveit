@@ -1,0 +1,2 @@
+#!/bin/bash
+source ~/version-control/ws_moveit/devel/setup.bash
