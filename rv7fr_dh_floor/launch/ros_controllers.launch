@@ -6,6 +6,6 @@
 
   <!-- Load the controllers -->
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-    output="screen" args="joint_velocity_trajectory joint_controller "/>
+    output="screen" args="joint_controller joint_velocity_trajectory "/>
 
 </launch>

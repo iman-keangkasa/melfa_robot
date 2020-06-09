@@ -5,7 +5,7 @@
   <!--node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"/>
 	<node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher"/-->
 	
-	<node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false">
+  <node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false" args='-d $(find rv7fl_path_planner_moveit)/config/visualizing_collision.rviz' >
 		<!--rosparam command="load" file="$(find rv7fr_dh_floor)/config/kinematics.yaml"/-->
   </node>
 

@@ -1,0 +1,13 @@
+<launch>
+  <include file="$(find rv7fr_dh_floor)/launch/demo.launch"/>
+
+  <!--Play rosbag or launch sensor here -->
+  <node pkg="moveit_tutorials" type="bag_publisher_maintain_time" name="point_cloud" />
+  
+  <node pkg="tf2_ros" type="static_transform_publisher" name="to_temp_link" args="0 -0.4 0.6 0 0 0 world temp_link" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="to_camera_link" args="0 0 0 0.1882209 0.0680271 -1.91357652 temp_link camera_rgb_optical_frame" />
+  <!--node pkg="tf2_ros" type="static_transform_publisher" name="to_camera_link" args="0 0 0 0 0 0 link_effector camera_rgb_optical_frame" /-->
+
+</launch>
+
+
