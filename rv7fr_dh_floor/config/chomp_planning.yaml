@@ -25,5 +25,16 @@ random_jump_amount: 1.0
 use_stochastic_descent: true
 enable_failure_recovery: false
 max_recovery_attempts: 5
-trajectory_initialization_method: "fillTrajectory" # [fillTrajectory, quintic-spline] fillTrajectory is for ompl-chomp or any post-processing
+trajectory_initialization_method: "fillTrajectory" 
+#[fillTrajectory, quintic-spline, linear, cubic] 
+#fillTrajectory is used for post-processing (Using CHOMP as postprocessor)
 
+#plannint_time_limit
+#the maximum time the optimizer can take to find a solution 
+#before terminating
+#
+#max_iterations
+#this is the maximum iteration that the planner can take to 
+#find a good solution
+#
+#
