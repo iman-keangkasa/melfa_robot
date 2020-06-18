@@ -320,11 +320,11 @@
     <axis xyz="0 0 0"/>
   </joint>
 
-  <!--gazebo>
+  <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
       <robotNamespace>/rv7fr</robotNamespace>
       <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
     </plugin>
-  </gazebo-->
+  </gazebo>
 
 </robot>

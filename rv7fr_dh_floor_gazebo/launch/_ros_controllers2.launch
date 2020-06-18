@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- This would combine the control_utils.yam -->
+
+  <!-- Robot state publisher -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"/>
+
+
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find rv7fr_dh_floor_gazebo)/config/_ros_controllers2.yaml" command="load"/>
+  
+  <!-- Start the controllers -->
+  <node name="arm_controller_spawner" pkg="controller_manager" type="controller_manager" respawn="false"
+    output="screen" args=" 
+    spawn arm_controller joint_state_controller 
+    "/>
+
+  <!--Here I should publish to /joint_states (invoked by the gazebo ros_control plugin>
+  <arg name="use_gui" default="false"/>
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="$(arg use_gui)"/>
+    <rosparam param="source_list">[/joint_states]</rosparam>
+  </node-->
+
+</launch>

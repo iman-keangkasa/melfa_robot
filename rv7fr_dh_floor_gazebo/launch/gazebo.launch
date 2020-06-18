@@ -2,7 +2,7 @@
 <launch>
   <arg name="paused" default="false"/>
   <arg name="gazebo_gui" default="true"/>
-  <arg name="urdf_path" default="$(find melfa_description)/urdf/rv7fr-dh-floor.urdf"/>
+  <arg name="urdf_path" default="$(find melfa_description)/urdf/rv7fr-dh-floor-gazebo.urdf"/>
 
   <!-- startup simulated world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -18,6 +18,6 @@
   <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot -x 0 -y 0 -z 0"
     respawn="false" output="screen" />
 
-  <include file="$(find rv7fr_dh_floor)/launch/ros_controllers.launch"/>
+  <include file="$(find rv7fr_dh_floor_gazebo)/launch/ros_controllers.launch"/>
 
 </launch>
