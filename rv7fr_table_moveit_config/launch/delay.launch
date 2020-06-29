@@ -1,0 +1,4 @@
+<launch>
+  <arg name="delay" default="2"/>
+  <node pkg="rv7fr_table_moveit_config" type="test.sh" name="delay_testing" output="screen" args="$(arg delay)"/> 
+</launch>

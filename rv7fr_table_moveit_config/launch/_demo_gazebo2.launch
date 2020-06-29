@@ -1,0 +1,11 @@
+<launch>
+  <include file="$(find rv7fr_table_moveit_config)/launch/_rv7fr.launch"/>
+
+  <!-- testing if delay can help with loading the controllers properly -->
+  <arg name="delay" default="4"/>
+  <include file="$(find rv7fr_table_moveit_config)/launch/delay.launch">
+    <arg name="delay" value="$(arg delay)"/>
+  </include>
+
+  <!--include file="$(find rv7fr_dh_floor_gazebo)/launch/_rv7fr_planning_execution.launch"/-->
+</launch>

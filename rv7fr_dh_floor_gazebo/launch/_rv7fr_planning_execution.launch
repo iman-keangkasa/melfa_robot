@@ -14,9 +14,10 @@
   <include file="$(find rv7fr_dh_floor_gazebo)/launch/move_group.launch">
     <arg name="publish_monitored_planning_scene" value="true" />
   </include>
-
+  
+  <arg name="rviz_config" default="true"/>
   <include file="$(find rv7fr_dh_floor_gazebo)/launch/moveit_rviz.launch">
-    <arg name="rviz_config" value="true"/>
+    <arg name="rviz_config" value="$(find rv7fr_dh_floor_gazebo)/rviz/execution.rviz"/>
   </include>
 
 </launch>

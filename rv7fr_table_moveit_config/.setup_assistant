@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: melfa_description
+    relative_path: urdf/rv7fr-dh-zero-table.urdf.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/rv7fr.srdf
+  CONFIG:
+    author_name: Iman
+    author_email: hafiz.ghazman@gmail.com
+    generated_timestamp: 1593107091

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="paused" default="false" />
+  <arg name="gui" default="true"/>
+  
+
+  <include file="$(find rv7fr_table_moveit_config)/launch/_gazebo2.launch"/>
+  <include file="$(find rv7fr_table_moveit_config)/launch/_ros_controllers2.launch"/>
+
+  <!-- Load the controllers spawned in _ros_controller.launch -->
+  <!--node name="controller_manager" pkg="controller_manager" type="controller_manager" respawn="false" output="screen" args="load arm_controller"/-->
+</launch>
