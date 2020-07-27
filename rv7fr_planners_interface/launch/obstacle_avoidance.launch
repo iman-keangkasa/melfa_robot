@@ -1,0 +1,5 @@
+<launch>
+  <node name="obstacle_avoidance" type="obstacle_avoidance" pkg="rv7fr_planners_interface" respawn="false" output="screen">
+  </node>
+</launch>
+

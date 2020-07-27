@@ -3,7 +3,7 @@
   <arg name="paused" default="false" />
   <arg name="gui" default="true"/>
   
-
+  <arg name="gazebo_gui" default="true"/>
   <include file="$(find rv7fr_table_moveit_config)/launch/_gazebo2.launch"/>
   <include file="$(find rv7fr_table_moveit_config)/launch/_ros_controllers2.launch"/>
 
